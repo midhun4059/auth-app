@@ -1,7 +1,8 @@
+import errorHandler from "../error.js";
 import User from "../Models/user.model.js";
 import bcryptjs from 'bcryptjs'
 
- const signup=async (req,res) => {
+ const signup=async (req,res,next) => {
   const {username,email,password}=req.body;
  const hashedPassword=bcryptjs.hashSync(password,10)
   const newUser=new User({username,email,password:hashedPassword})
@@ -11,11 +12,7 @@ import bcryptjs from 'bcryptjs'
     res.status(201).json({message:"User created successfully"})
 
   }catch (error) {
-    if (error.code === 11000) {
-      res.status(400).json({ message: "Username already exists" });
-    } else {
-      res.status(500).json({ message: "An error occurred" });
-    }
+    next(errorHandler(300,'Something went wrong'));
   }
 }
 
