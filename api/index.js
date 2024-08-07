@@ -6,6 +6,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const app = express();
+//middleware to parse json
+app.use(express.json());
+
 mongoose.connect(process.env.MONGO)
   .then(() => {
     console.log('Connected to MongoDB');
@@ -14,8 +18,7 @@ mongoose.connect(process.env.MONGO)
     console.log(err);
   });
 
-const app = express();
-app.use(express.json());
+
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
